@@ -20,7 +20,7 @@ jobs:
       run: npm install -g pnpm @antfu/ni && nlx playwright install --with-deps && ni --frozen-lockfile -s
 
     - name: Crawling
-      run: nr build && nr start:prod -a
+      run: nr start:prod -a
 
     - uses: actions/upload-artifact@v4
       if: always()
