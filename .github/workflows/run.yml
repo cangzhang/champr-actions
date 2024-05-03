@@ -12,9 +12,13 @@ jobs:
         repository: cangzhang/champr-crawler
         token: ${{ secrets.GH_PAT }}
 
-    - uses: actions/setup-node@v4
+    # - uses: actions/setup-node@v4
+    #   with:
+    #     node-version: lts/*
+
+    - uses: oven-sh/setup-bun@v1
       with:
-        node-version: lts/*
+        bun-version: latest
 
     - name: Install dependencies
       run: npm install -g pnpm @antfu/ni && nlx playwright install --with-deps && ni --frozen-lockfile -s
