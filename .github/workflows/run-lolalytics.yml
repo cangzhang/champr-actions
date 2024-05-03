@@ -1,7 +1,11 @@
-name: Run
+name: LOLALYTICS
 on:
   workflow_dispatch:
-
+  workflow_run:
+    workflows: ["Trigger All"]
+    types:
+      - completed
+      
 jobs:
   run:
     timeout-minutes: 60
@@ -24,7 +28,7 @@ jobs:
       run: bunx playwright install --with-deps && bun install --frozen-lockfile --slient && bun i -g @antfu/ni
 
     - name: Crawling
-      run: nr start:prod -a
+      run: nr start:prod -s lolalytics
 
     - uses: actions/upload-artifact@v4
       if: always()

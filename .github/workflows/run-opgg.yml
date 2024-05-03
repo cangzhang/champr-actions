@@ -1,0 +1,37 @@
+name: OP.GG
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Trigger All"]
+    types:
+      - completed
+jobs:
+  run:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: cangzhang/champr-crawler
+        token: ${{ secrets.GH_PAT }}
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bunx playwright install --with-deps && bun install --frozen-lockfile --slient && bun i -g @antfu/ni
+
+    - name: Crawling
+      run: nr start:prod -s op.gg
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: results
+        path: storage/
+        retention-days: 30
