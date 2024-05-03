@@ -21,7 +21,7 @@ jobs:
         bun-version: latest
 
     - name: Install dependencies
-      run: npm install -g pnpm @antfu/ni && nlx playwright install --with-deps && ni --frozen-lockfile -s
+      run: bun i -g @antfu/ni && nlx playwright install --with-deps && ni bun install --frozen-lockfile -s
 
     - name: Crawling
       run: nr start:prod -a
