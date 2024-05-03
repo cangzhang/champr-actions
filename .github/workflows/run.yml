@@ -1,0 +1,30 @@
+name: Run
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: cangzhang/champr-crawler
+        token: ${{ secrets.GH_PAT }}
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Install dependencies
+      run: npm install -g pnpm @antfu/ni && nlx playwright install --with-deps && ni --frozen-lockfile -s
+
+    - name: Crawling
+      run: nr build && nr start:prod
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: results
+        path: storage/
+        retention-days: 30
